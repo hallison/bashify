@@ -1,0 +1,361 @@
+############################################################################
+# Bashify
+# $Id: console 2 2008-06-26 17:22:34Z hallison $
+#
+# Copyright (C) 2007, 2008 by Hallison Vasconcelos Batista
+# --------------------------------------------------------------------------
+#   This file is part of Bashify.
+#
+#   Bashify is free software; you can redistribute it and or modify it under
+#   the terms of the GNU Lesser General Public License as published by the
+#   Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   Bashify is distributed in the hope that it will be useful, but WITHOUT
+#   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+#   more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the
+#   Free Software Foundation, Inc.,
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# --------------------------------------------------------------------------
+
+#DOC
+# Author:
+#   Hallison Vasconcelos Batista <hallison.batista@gmail.com>
+#
+# Timestamp:
+#   2007.11.04 22:25:35 AMT
+#
+# Version:
+#   0.1.0
+#
+# Requirements:
+#   None
+#
+# Description:
+#   This script should be used as library in source script file or into
+#   Bash sessions. The goal is improve console features and commands.
+#
+# Changelog:
+#   * 0.1.0, 2008.05.05
+#     * Work complete.
+#     * Created main function for manage console features.
+#
+#   * 0.0.1, 2007.11.04
+#     * Initial build.
+#
+# Todo:
+#   * Add new options for enable control of error messages.
+#   * Add default messages (usage, about and license)
+#   * Run tests.
+#
+
+declare -r CONSOLE_COMMANDS=()
+
+#DOC
+# Description:
+#   Simple function for put messages in console.
+#
+# Options:
+#   None
+#
+# Usage:
+#   put [ARGS]
+#
+# Author:
+#   Hallison V. Batista (hallison.batista@gmail.com)
+#
+
+function put() {
+  echo -en ${@};
+  return 0
+}
+
+#MAN
+# NAME:
+#   console - Bashify - Console Library
+#
+# SYNOPSIS:
+#   console <command> <option> [<value>]
+#
+#   Console chars and text manipulation.
+#   The commands should be: *text*, *color*, *cursor* or *clear*. For options
+#   see *OPTIONS*.
+#
+# DESCRIPTION:
+#   Bashify console is a set of functions for manipulation of text into console
+#   Bash session.
+#
+#   This library should be used into script sources from Bashify project or
+#   into Bash sessions.
+#
+# OPTIONS:
+#     Configurations for text mode, use *text* command with following options:
+#
+#     -c, --console
+#         Reset console text mode.
+#
+#     -s, --strong
+#         Configure console text to strong mode.
+#
+#     -n, --normal
+#         Configure console text to normal mode.
+#
+#     -u, --underline
+#         Configure console text to underline mode.
+#
+#     -b, --blink
+#         Configure console text to blink.
+#
+#     -r, --reverse
+#         Configure console text to reverse mode.
+#
+#     Configurations for colors in console messages, use *color* command with
+#     following options:
+#
+#     -f, --foreground <color>
+#         Configure only foreground color.
+#
+#     -b, --background <color>
+#         Configure only background color.
+#
+#     The values of the options of color should be only: black, red, green
+#     brown or yellow, blue, purple, cyan and gray.
+#
+#     Manipulation cursor into console, use *cursor* command with following
+#     options:
+#
+#     -u, --to-up <n>
+#     -d, --to-down <n>
+#     -l, --to-left <n>
+#     -r, --to-right <n>
+#         Put cursor possition up/down/left/right <n> into screen.
+#
+#     -m, --move-to <line> <column>
+#         Put cursor position in line and column.
+#
+#     -U, --line-up <n>
+#     -D, --line-down <n>
+#         Put from current position to <n> lines up/down.
+#
+#     -A, --line-add <n>
+#     -R, --line-remove <n>
+#         Add/remove <n> lines from current cursor position.
+#
+#     -C, --column-to 
+#         Put <n>
+#
+#     --save
+#         <n>
+#
+#     --restore
+#         <n>
+#
+#     --turn-on
+#         <n>
+#
+#     --turn-off
+#         <n>
+#
+#     clear     Extend clear function.
+#
+
+#DOC
+# Description:
+#   Main function for screen manipulation from Bashify projects.
+#
+# Commands:
+#   text      Configure text mode.
+#   color     Configure colors for console messages.
+#   cursor    Manipulate cursor into console.
+#   clear     Extend clear function.
+#
+# Options:
+#   Text options
+#     -c --console    Reset console text mode.
+#     -s --strong     Configure console text to strong mode.
+#     -n --normal     Configure console text to normal mode.
+#     -u --underline  Configure console text to underline mode.
+#     -b --blink      Configure console text to blink.
+#     -r --reverse    Configure console text to reverse mode.
+#
+#   Color options
+#     -f  --foreground      Configure only foreground color.
+#     -b  --background      Configure only background color.
+#
+#     The values of the options of color should be only: black, red, green
+#     brown or yellow, blue, purple, cyan and gray.
+#
+# Usage:
+#   console [COMMAND] [OPTION]
+#   console [COMMAND] [OPTION] [VALUE]
+#
+# Author:
+#   Hallison V. Batista (hallison.batista@gmail.com)
+#
+
+function console() {
+  declare -r ESCAPE="\033["
+
+  ## Constants for modes of colors.
+  declare -r TEXT_CONSOLE="0m"
+  declare -r TEXT_STRONG="1m"
+  declare -r TEXT_NORMAL="2m"
+  declare -r TEXT_UNDERLINE="4m"
+  declare -r TEXT_BLINK="5m"
+  declare -r TEXT_REVERSE="7m"
+  #declare -r TEXT_NONE3="3m"
+  #declare -r TEXT_NONE6="6m"
+
+  ## Constants for colors.
+  declare -r TEXT_FGCOLOR=3
+  declare -r TEXT_BGCOLOR=4
+  declare -r TEXT_COLOR_BLACK="0m"
+  declare -r TEXT_COLOR_RED="1m"
+  declare -r TEXT_COLOR_GREEN="2m"
+  declare -r TEXT_COLOR_BROWN="3m"
+  declare -r TEXT_COLOR_BLUE="4m"
+  declare -r TEXT_COLOR_PURPLE="5m"
+  declare -r TEXT_COLOR_CYAN="6m"
+  declare -r TEXT_COLOR_GRAY="7m"
+
+  ## Constants for cursor.
+  declare -r CURSOR_UP="A"
+  declare -r CURSOR_DOWN="B"
+  declare -r CURSOR_RIGHT="C"
+  declare -r CURSOR_LEFT="D"
+  declare -r CURSOR_LINE_DOWN="E"
+  declare -r CURSOR_LINE_UP="F"
+  declare -r CURSOR_COLUMN_MOVE="G"
+  declare -r CURSOR_MOVE="H"
+  declare -r CURSOR_INSERT_LINE="L"
+  declare -r CURSOR_DELETE_LINE="M"
+  declare -r CURSOR_CHARS_DELETE="P"
+  declare -r CURSOR_CHARS_CLEAN="X"
+  declare -r CURSOR_TURN_ON="?25h"
+  declare -r CURSOR_TURN_OFF="?25l"
+  declare -r CURSOR_SAVE_POSITION="s"
+  declare -r CURSOR_RESTORE_POSITION="r"
+
+  ## Constants for clear screen.
+  declare -r CLEAR_SCREEN="J"
+  declare -r CLEAR_LINE="K"
+
+  ###
+  # Description:
+  #   Adjust mode of color.
+  #
+  # Usage:
+  #   text [MODE]
+  #
+
+  declare -ar TEXT_COMMANDS=(console strong normal underline blink reverse)
+  function text() {
+    case ${1} in
+      -c|--console   ) put "${ESCAPE}${TEXT_CONSOLE}"   ;;
+      -s|--strong    ) put "${ESCAPE}${TEXT_STRONG}"    ;;
+      -n|--normal    ) put "${ESCAPE}${TEXT_NORMAL}"    ;;
+      -u|--underline ) put "${ESCAPE}${TEXT_UNDERLINE}" ;;
+      -b|--blink     ) put "${ESCAPE}${TEXT_BLINK}"     ;;
+      -r|--reverse   ) put "${ESCAPE}${TEXT_REVERSE}"   ;;
+      *              ) return 1 ;; # TODO: Return correct code
+    esac
+    return 0
+  }
+
+  ###
+  # Description:
+  #   Adjust console colors.
+  #
+  # Usage:
+  #   color [OPTION] [COLOR]
+  #
+
+  declare -ar TEXT_COLOR_OPTIONS=(foreground background)
+  declare -ar TEXT_COLOR_VALUES=(black red green brown blue purple cyan gray)
+  function color() {
+    local option_mode
+    while [[ ${#} -gt 0 ]]
+    do
+      [[ ${1} =~ -(f|-foreground)$ ]] && option_mode="${TEXT_FGCOLOR}"
+      [[ ${1} =~ -(b|-background)$ ]] && option_mode="${TEXT_BGCOLOR}"
+      shift
+      case ${1} in
+        0|black        ) put "${ESCAPE}${option_mode}${TEXT_COLOR_BLACK}"  ;;
+        1|red          ) put "${ESCAPE}${option_mode}${TEXT_COLOR_RED}"    ;;
+        2|green        ) put "${ESCAPE}${option_mode}${TEXT_COLOR_GREEN}"  ;;
+        3|brown|yellow ) put "${ESCAPE}${option_mode}${TEXT_COLOR_BROWN}"  ;;
+        4|blue         ) put "${ESCAPE}${option_mode}${TEXT_COLOR_BLUE}"   ;;
+        5|purple       ) put "${ESCAPE}${option_mode}${TEXT_COLOR_PURPLE}" ;;
+        6|cyan         ) put "${ESCAPE}${option_mode}${TEXT_COLOR_CYAN}"   ;;
+        7|gray         ) put "${ESCAPE}${option_mode}${TEXT_COLOR_GRAY}"   ;;
+        *                     ) return 1 ;; # TODO: Return correct code
+      esac
+      shift
+    done
+    return 0
+  }
+
+  ###
+  # Description:
+  #   Adjust cursor to up, down, right or left.
+  #
+  # Usage:
+  #   cursor [COMMAND] [VALUE] ...
+  #   cursor [OPTION]
+  #
+
+  declare -ar CURSOR_COMMANDS=(to-up to-down to-right to-left)
+  declare -ar CURSOR_OPTIONS=(save restores turn-on turn-off)
+  function cursor() {
+    while [[ ${#} -gt 0 ]]
+    do
+      case ${1} in
+        -u|--to-up        ) put "${ESCAPE}${2}${CURSOR_UP}"          ;;
+        -d|--to-down      ) put "${ESCAPE}${2}${CURSOR_DOWN}"        ;;
+        -r|--to-right     ) put "${ESCAPE}${2}${CURSOR_RIGHT}"       ;;
+        -l|--to-left      ) put "${ESCAPE}${2}${CURSOR_LEFT}"        ;;
+        -m|--move-to      ) put "${ESCAPE}${2};${3}${CURSOR_MOVE}"   ; shift 1 ;;
+        -D|--line-down    ) put "${ESCAPE}${2}${CURSOR_LINE_DOWN}"      ;;
+        -U|--line-up      ) put "${ESCAPE}$((${2}+2))${CURSOR_LINE_UP}"     ;;
+        -A|--line-add     ) put "${ESCAPE}${2}${CURSOR_INSERT_LINE}" ;;
+        -R|--line-remove  ) put "${ESCAPE}${2}${CURSOR_DELETE_LINE}" ;;
+        -C|--column-to    ) put "${ESCAPE}${2}${CURSOR_COLUMN_MOVE}" ;;
+        --save            ) put "${ESCAPE}${POSITION_SAVE}"        ;;
+        --restore         ) put "${ESCAPE}${POSITION_RESTORE}"     ;;
+        --turn-on         ) put "${ESCAPE}${CURSOR_TURN_ON}"       ;;
+        --turn-off        ) put "${ESCAPE}${CURSOR_TURN_OFF}"      ;;
+        *                 ) return 1 ;; # TODO: Return correct code
+      esac
+      shift
+    done
+    return 0
+  }
+
+  declare -ar CLEAR_COMMANDS=(screen line)
+  declare -ar CLEAR_VALUES=(to-end to-begin all)
+  function clear() {
+    local option_clear
+    while [[ ${#} -gt 0 ]]
+    do
+      [[ ${1} =~ -(s|-screen)$ ]] && option_clear="${CLEAR_SCREEN}"
+      [[ ${1} =~ -(l|-line)$   ]] && option_clear="${CLEAR_LINE}"
+      shift
+      case ${1} in
+        to-end   ) put "${ESCAPE}0${option_clear}" ;;
+        to-begin ) put "${ESCAPE}1${option_clear}" ;;
+        all      ) put "${ESCAPE}2${option_clear}" ;;
+        *        ) return 1 ;; # TODO: Return correct code
+      esac
+      shift
+    done
+    return 0
+  }
+
+
+  [[ ${#} -eq 0 ]] && echo "${SELF_USAGE}" || ${@}
+}
+

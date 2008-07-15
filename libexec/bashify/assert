@@ -1,0 +1,240 @@
+############################################################################
+# Bashify
+# $Id: assert 2 2008-06-26 17:22:34Z hallison $
+#
+# Copyright (C) 2007 by Hallison Vasconcelos Batista
+# --------------------------------------------------------------------------
+#   This file is part of Bashify.
+#
+#   Bashify is free software; you can redistribute it and or modify it under
+#   the terms of the GNU Lesser General Public License as published by the
+#   Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   Bashify is distributed in the hope that it will be useful, but WITHOUT
+#   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+#   more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the
+#   Free Software Foundation, Inc.,
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# --------------------------------------------------------------------------
+
+#DOC
+# Author:
+#   Hallison Vasconcelos Batista <hallison.batista@gmail.com>
+#
+# Timestamp:
+#   2008.05.06 12:50:12 AMT
+#
+# Version:
+#   0.1.0
+#
+# Requirements:
+#   None
+#
+# Description:
+#   This script should be used as library in source script file or into
+#   Bash sessions. The goal is improve conditional tests.
+#
+# Changelog:
+#   * 0.1.0, 2007.05.06
+#       * Initial build.
+#       * Created main function for manage asserts to files, strings and
+#         numbers.
+#
+# Todo:
+#   * Add new options for enable control of error messages.
+#   * Add default messages (usage, about and license).
+#   * Run tests.
+#
+
+#MAN
+# NAME:
+#   assert - Bashify - Assert library
+#
+# SYNOPSIS:
+#   assert <type> <option>
+#   assert <type> <value1> <operator> <value2>
+#
+#   Type should be *file*, *string*, *number*. For options see *OPTIONS*
+#   section.
+#
+#   For assert logical tests in files, use type option *file*. For assert
+#   logical tests in string values, use type option *string*. For assert
+#   logical tests in number values, use type option *number*.
+#
+# DESCRIPTION:
+#   Bashify assert is a set of functions that most be used in source script
+#   file or in a new session of Bash.
+#
+#   This library must be used for assert logical tests. It's compatible with
+#   all Bash built-in test options.
+#
+# OPTIONS:
+#   For assert file type:
+#
+#     -a, -e, --exists <file>
+#         Assert true if file exists.
+#
+#     -b, --block <file>
+#         Assert true if file is block special.
+#
+#     -c, --char <file>
+#         Assert true if file is character special.
+#
+#     -d, --directory <file>
+#         Assert true if file is a directory.
+#
+#     -f, --file
+#         Assert true if file exists and is a regular file.
+#
+#     -g, --group-id
+#         Assert true if file is set-group-id.
+#
+#     -h, -L, --link
+#         Assert true if file is a symbolic link.
+#
+#     -k, --stick
+#         Assert true if file has its 'sticky' bit set.
+#
+#     -p, --pipe
+#         Assert true if file is a named pipe.
+#
+#     -r, --readable
+#         Assert true if file is readable by you.
+#
+#     -s, --not-empty
+#         Assert true if file exists and is not empty.
+#
+#     -S, --socket
+#         Assert true if file is a socket.
+#
+#     -u, --user-id
+#         Assert true if the file is set-user-id.
+#
+#     -w, --writable
+#         Assert true if the file is writable by you.
+#
+#     -x, --executable
+#         Assert true if the file is executable by you.
+#
+#     -O, --owned-user
+#         Assert true if the file is effectively owned by you.
+#
+#     -G, --owned-group
+#         Assert true if the file is effectively owned by group.
+#
+#     -N, --modified
+#         Assert true if the file has been modified.
+#
+#     <file1> -nt, --newer <file2>
+#         Assert true if file1 is newer than file2 (according to modification
+#         date).
+#     
+#     <file1> -ot, --older <file2>
+#         Assert true if file1 is older than file2.
+#
+#     <file1> -ef, --link-to <file2>
+#         Assert true if file1 is a hard link to file2.
+#
+
+#DOC
+# Description:
+#   Main function for assert conditional tests.
+#
+# Options:
+#   File options
+#     -a -e --exists    Assert true if file exists.
+#     -b --block        Assert true if file is block special.
+#     -c --char         Assert true if file is character special.
+#     -d --directory    Assert true if file is a directory.
+#     -f --file         Assert true if file exists and is a regular file.
+#     -g --group-id     Assert true if file is set-group-id.
+#     -h -L --link      Assert true if file is a symbolic link.
+#     -k --stick        Assert true if file has its 'sticky' bit set.
+#     -p --pipe         Assert true if file is a named pipe.
+#     -r --readable     Assert true if file is readable by you.
+#     -s --not-empty    Assert true if file exists and is not empty.
+#     -S --socket       Assert true if file is a socket.
+#     -u --user-id      Assert true if the file is set-user-id.
+#     -w --writable     Assert true if the file is writable by you.
+#     -x --executable   Assert true if the file is executable by you.
+#     -O --owned-user   Assert true if the file is effectively owned by you.
+#     -G --owned-group  Assert true if the file is effectively owned by group.
+#     -N --modified     Assert true if the file has been modified.
+#   
+#   File operations
+#     -nt --newer       Assert true if file1 is newer than file2 (according to
+#                       modification date).
+#     
+#     -ot --older       Assert true if file1 is older than file2.
+#     -ef --link-to     Assert true if file1 is a hard link to file2.
+#
+
+function assert() {
+
+  function file() {
+    case ${1} in
+      -a|-e|--exists   ) [[ -a ${2} ]] ;; # True if file exists.
+      -b|--block       ) [[ -b ${2} ]] ;; # True if file is block special.
+      -c|--char        ) [[ -c ${2} ]] ;; # True if file is character special.
+      -d|--directory   ) [[ -d ${2} ]] ;; # True if file is a directory.
+      -f|--file        ) [[ -f ${2} ]] ;; # True if file exists and is a regular file.
+      -g|--group-id    ) [[ -g ${2} ]] ;; # True if file is set-group-id.
+      -h|-L|--link     ) [[ -h ${2} ]] ;; # True if file is a symbolic link.
+      -k|--stick       ) [[ -k ${2} ]] ;; # True if file has its 'sticky' bit set.
+      -p|--pipe        ) [[ -p ${2} ]] ;; # True if file is a named pipe.
+      -r|--readable    ) [[ -r ${2} ]] ;; # True if file is readable by you.
+      -s|--not-empty   ) [[ -s ${2} ]] ;; # True if file exists and is not empty.
+      -S|--socket      ) [[ -S ${2} ]] ;; # True if file is a socket.
+      -u|--user-id     ) [[ -u ${2} ]] ;; # True if the file is set-user-id.
+      -w|--writable    ) [[ -w ${2} ]] ;; # True if the file is writable by you.
+      -x|--executable  ) [[ -x ${2} ]] ;; # True if the file is executable by you.
+      -O|--owned-user  ) [[ -O ${2} ]] ;; # True if the file is effectively owned by you.
+      -G|--owned-group ) [[ -G ${2} ]] ;; # True if the file is effectively owned by your group.
+      -N|--modified    ) [[ -N ${2} ]] ;; # True if the file has been modified since it was last read.
+      ^[a-zA-Z]*       )
+        case ${2} in
+          -nt|--newer   ) [[ ${1} -nt ${3} ]] ;; # True if file1 is newer than file2 (according to modification date).
+          -ot|--older   ) [[ ${1} -ot ${3} ]] ;; # True if file1 is older than file2.
+          -ef|--link-to ) [[ ${1} -ef ${3} ]] ;; # True if file1 is a hard link to file2.
+          -*            ) echo "${0}:${FUNCNAME}: Usage error."; return 1 ;;
+        esac
+      ;;
+    esac
+  }
+
+#      -t|--  ) test -t FD   ;; # True if FD is opened on a terminal.
+  function string() {
+    case ${1} in
+      -z|--empty       ) [[ -z ${1} || ${1} ]] ;;
+      -n|--not-empty   ) [[ -n ${1} ]]         ;;
+      *                )
+        case ${2} in
+          -e|--equal       ) [[ ${1} == ${3} ]] ;;
+          -d|--not-equal   ) [[ ${1} != ${3} ]] ;;
+          -b|--sort-before ) [[ ${1} <  ${3} ]] ;;
+          -a|--sort-after  ) [[ ${1} >  ${3} ]] ;;
+          *                ) return 1 ;;
+        esac
+      ;;
+    esac
+   }
+
+  function number() {
+    case ${2} in
+      -eq|--equal               ) [[ ${1} -eq ${3} ]] ;;
+      -lt|--less-than           ) [[ ${1} -lt ${3} ]] ;;
+      -le|--less-than-or-equal  ) [[ ${1} -le ${3} ]] ;;
+      -gt|--great-than          ) [[ ${1} -gt ${3} ]] ;;
+      -ge|--great-than-equal    ) [[ ${1} -ge ${3} ]] ;;
+      *                         ) return 1 ;;
+    esac
+  }
+
+  # Execute arguments.
+  ${@}
+}

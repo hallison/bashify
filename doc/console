@@ -1,0 +1,57 @@
+Bashify - console
+
+This library must be used for console manipulation features, as well text modes,
+colors and cursor movement.
+
+Usage:
+  console [COMMAND] [OPTION]
+  console [COMMAND] [INSTRUCTION] [VALUE]
+
+Commands:
+  text      Configure text mode.
+  color     Configure colors for console messages.
+  cursor    Manipulate cursor into console.
+  clear     Extend clear function.
+
+  Text options
+    -c  --console         Reset console text mode.
+    -s  --strong          Configure console text to strong mode.
+    -n  --normal          Configure console text to normal mode.
+    -u  --underline       Configure console text to underline mode.
+    -b  --blink           Configure console text to blink.
+    -r  --reverse         Configure console text to reverse mode.
+
+  Color options
+    -f  --foreground      Configure only foreground color.
+    -b  --background      Configure only background color.
+
+    The values of the options of color should be only: black, red, green
+    brown or yellow, blue, purple, cyan and gray.
+
+  Cursor options
+    -u  --to-up           Cursor go to up 
+    -d  --to-down         Cursor go to down
+    -r  --to-right        Cursor go to right
+    -l  --to-left         Cursor go to left
+    -m  --move-to         Cursor move to row and column
+    -D  --line-down       Current cursor line go to down
+    -U  --line-up         Current cursor line go to up
+    -A  --line-add        Add new lines after current cursor line
+    -R  --line-remove     Remove new lines after current cursor line
+    -C  --column-to       Move current cursor column
+
+  Cursor options
+    --save                Save cursor position
+    --restore             Restores cursor position
+    --turn-on             Turn on prompt cursor
+    --turn-off            Turn off prompt cursor
+
+  Clear instructions
+    -s  --screen          Use console screen
+    -l  --line            Use console line
+
+  Clear values
+    to-end                Clear to end of screen or line
+    to-begin              Clear to begin of screen or line
+    all                   Clear all (screen or line)
+

@@ -1,0 +1,40 @@
+Bashify - assert
+
+
+Usage:
+  assert [TYPE] [OPTION]
+  assert [TYPE] [VALUE1] [OPERATOR] [VALUE2]
+
+
+Options:
+
+  File options
+
+    -a -e --exists    Assert true if file exists.
+    -b --block        Assert true if file is block special.
+    -c --char         Assert true if file is character special.
+    -d --directory    Assert true if file is a directory.
+    -f --file         Assert true if file exists and is a regular file.
+    -g --group-id     Assert true if file is set-group-id.
+    -h -L|--link      Assert true if file is a symbolic link.
+    -k --stick        Assert true if file has its 'sticky' bit set.
+    -p --pipe         Assert true if file is a named pipe.
+    -r --readable     Assert true if file is readable by you.
+    -s --not-empty    Assert true if file exists and is not empty.
+    -S --socket       Assert true if file is a socket.
+    -u --user-id      Assert true if the file is set-user-id.
+    -w --writable     Assert true if the file is writable by you.
+    -x --executable   Assert true if the file is executable by you.
+    -O --owned-user   Assert true if the file is effectively owned by you.
+    -G --owned-group  Assert true if the file is effectively owned by group.
+    -N --modified     Assert true if the file has been modified.
+  
+  File operations
+
+    -nt --newer       Assert true if file1 is newer than file2 (according to
+                      modification date).
+    
+    -ot --older       Assert true if file1 is older than file2.
+    -ef --link-to     Assert true if file1 is a hard link to file2.
+
+

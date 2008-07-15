@@ -1,0 +1,20 @@
+Bashify - To do list
+
+FEATURES
+
+  * Build struct files for new projects (simple script utility or Bash script project).
+  * Library for handle main erros in Bash scripts.
+  * Logger for log support.
+  * Binary (script) to load functions of libraries.
+  * Script to get keywords for documentation project.
+  * Scripts for tests to libraries.
+
+IMPROVEMENTS
+
+  * None yet,
+
+BUGS
+
+  * None yet.
+
+

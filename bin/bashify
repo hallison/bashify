@@ -1,0 +1,79 @@
+#!/bin/bash
+############################################################################
+# BSS - Bash Scripting Support
+#
+# Copyright (C) 2007 by Hallison Vasconcelos Batista
+# --------------------------------------------------------------------------
+#   This program is free software; you can redistribute it and or modify
+#   it under the terms of the GNU Lesser General Public License as
+#   published by the Free Software Foundation; either version 2 of the
+#   License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the
+#   Free Software Foundation, Inc.,
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# --------------------------------------------------------------------------
+
+#DOC
+# Author       : Hallison Vasconcelos Batista <hallison.batista@gmail.com>
+# Timestamp    : 2007.11.04 22:25:35 AMT
+# Version      : 0.1.0
+# Requirements : None
+#
+# Description:
+#   Bash Scripting Toolkit. This program manage Bast projects. More
+#   information, see manual section.
+#
+# Changelog:
+# --------------------------------------------------------------------------
+#   * 0.1.0, 2007.11.04
+#     * Initial build.
+#
+
+source libexec/bast/console
+
+  
+function project() {
+  function new() {
+    return 0
+  }
+
+  function doc() {
+    return 0
+  }
+
+  while [[ ${#} -gt 0 ]]
+  do
+    case ${1} in
+      -n|--new  ) printf "New project: ${2}\n" ; shift ;;
+      *         ) return 1;;
+    esac
+  done
+  return 0
+}
+
+function script() {
+  function new() {
+    printf "New script: ${1}\n"
+    return 0
+  }
+
+  function config() {
+    return 0
+  }
+  
+  ${@}
+
+}
+
+
+console color -f green
+
+${@}
+

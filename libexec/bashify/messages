@@ -1,0 +1,150 @@
+# Bashify
+# $Id: messages 2 2008-06-26 17:22:34Z hallison $
+#
+# Copyright (C) 2007 by Hallison Vasconcelos Batista
+# --------------------------------------------------------------------------
+#   This file is part of Bashify.
+#
+#   Bashify is free software; you can redistribute it and or modify it under
+#   the terms of the GNU Lesser General Public License as published by the
+#   Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   Bashify is distributed in the hope that it will be useful, but WITHOUT
+#   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+#   more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the
+#   Free Software Foundation, Inc.,
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# --------------------------------------------------------------------------
+
+#DOC
+# Author:
+#   Hallison Vasconcelos Batista <hallison.batista@gmail.com>
+#
+# Timestamp:
+#   2007.11.02 03:00:02 AMT
+#
+# Version:
+#   0.1.0
+#
+# Requirements:
+#   None
+#
+# Description:
+#   This script should be used as library in source script file or in a new
+#   Bash session. The goal is managing simple system messages.
+#
+# Changelog:
+#   * 0.1.0, 2007.11.02
+#     * Initial build.
+#
+# Todo:
+#   * Add new options for enable control of error messages.
+#   * Add default messages (usage, about and license).
+#   * Run tests.
+#
+
+declare -x DIALOG_CANCEL="1"
+declare -x DIALOG_ERROR="126"
+declare -x DIALOG_ESC="1"
+declare -x DIALOG_EXTRA="3"
+declare -x DIALOG_HELP="2"
+declare -x DIALOG_ITEM_HELP="2"
+declare -x DIALOG_OK="0"
+
+declare -x MSG_NAME="messages"
+declare -x MSG_AUTHOR="Hallison Vasconcelos Batista"
+declare -x MSG_VERSION="0.1"
+declare -x MSG_TIMESTAMP="2007.11.02 03:00:02 AMT"
+declare -x MSG_BASE="$(basename ${0} {*.})"
+declare -x MSG_URL=""
+declare -x MSG_EMAIL="hallison.batista@gmail.com"
+declare -x MSG_ABOUT="\
+${MSG_BASE} - ${MSG_NAME} version \
+${MSG_VERSION} ${MSG_TIMESTAMP}
+Shell script library destined to managing simple system messages.
+
+Copyright 2007 ${MSG_AUTHOR} <${MSG_EMAIL}>
+
+Distributed under the terms of the GNU General Public License, Version 2
+"
+
+
+###
+# Note:
+#   The system messages constants reflecting values of system library
+#   /usr/include/sysexits.h
+#
+
+declare -i SUCCESSFUL=0              # Successful termination
+declare -i FAILURE=1                 # Failure termination
+declare -i ERROR_BUILTIN=2           # Error in builtin comand
+declare -i ERROR_USAGE=64            # Command line usage error
+declare -i ERROR_INPUT_DATA=65       # Data format error
+declare -i ERROR_NO_INPUT=66         # Can't open input
+declare -i ERROR_USER_UNKNOW=67      # User name unknown
+declare -i ERROR_HOST_UNKNOW=68      # Host name unknown
+declare -i ERROR_UNAVAILABLE=69      # Service unavailable
+declare -i ERROR_SOFTWARE_ERROR=70   # Internal software error
+declare -i ERROR_SYSTEM_ERROR=71     # System error
+declare -i ERROR_SYSTEM_FILE=72      # Critical system file missing
+declare -i ERROR_NO_OUTPUT=73        # Can't create output
+declare -i ERROR_IO_ERROR=74         # Input/output error
+declare -i ERROR_TEMPORARY_FAIL=75   # Temporary failure
+declare -i ERROR_PROTOCOL=76         # Remote error in protocol
+declare -i ERROR_NO_PERMISSION=77    # Permission denied
+declare -i ERROR_CONFIGURATION=78    # Configuration error
+declare -i ERROR_NOT_EXECUTABLE=126  # Not executable
+
+ 
+## Declaration of array of list of the system message
+declare -xa DESCRIPTIONS=(
+  [0]=$"Successful."
+  [1]=$"Failure."
+  [2]=$"Builtin command failure."
+
+  [64]=$"The command was used incorrectly."
+  [65]=$"The input data are not correct."
+  [66]=$"The input file cannot be readed."
+  [67]=$"The user specified does not exist."
+  [68]=$"The host specified does not exist."
+  [69]=$"A service/command/operation is unavailable."
+  [70]=$"An internal software error has been detected."
+  [71]=$"An operating system error has been detected."
+  [72]=$"A system file error has been detected."
+  [73]=$"The output file cannot be created."
+  [74]=$"An error occurred while doing I/O on some file."
+  [75]=$"Temporary failure, retry again."
+  [76]=$"The remote system returned an error in protocol exchange."
+  [77]=$"The user not has sufficient privileges to perform the operation."
+  [78]=$"Configuration error."
+
+  [100]=$"Invalid operation."
+  [126]=$"User don't have privileges to access directory or to execute file."
+  [127]=$"Command not found."
+  [128]=$"Command not found."
+  [130]=$""
+)
+
+
+#DOC
+# Description:
+#   This function shows the argument return message or the return of last
+#   command output.
+#
+# Options:
+#   Any number in sequence 0, 1, 2, 64..78, 100, 126..130
+#
+# Author:
+#   Hallison Vasconcelos Batista (hallison.bash@gmail.com)
+
+function displaymsg {
+  ## Validate user options and setting message
+  # TODO: Add handler internal error in arguments
+  ## Display message
+  echo -n "${MSG_BASE}: ${DESCRIPTIONS[${1}]} ${2}"
+}

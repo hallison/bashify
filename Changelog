@@ -1,0 +1,6 @@
+0.1.0, 2008.05.12
+
+  * Created library libexec/bashify/console for text modes, messages in prompt, colors and cursor manipulation.
+  * Created library libexec/bashify/assert for improves logical tests.
+
+
