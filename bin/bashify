@@ -1,6 +1,6 @@
 #!/bin/bash
 ############################################################################
-# BSS - Bash Scripting Support
+# Bashify - Bash Scripting Support
 #
 # Copyright (C) 2007 by Hallison Vasconcelos Batista
 # --------------------------------------------------------------------------
@@ -27,8 +27,8 @@
 # Requirements : None
 #
 # Description:
-#   Bash Scripting Toolkit. This program manage Bast projects. More
-#   information, see manual section.
+#   This program manage Bashify projects. More information, see manual
+#   section.
 #
 # Changelog:
 # --------------------------------------------------------------------------
@@ -36,44 +36,67 @@
 #     * Initial build.
 #
 
-source libexec/bast/console
+declare -Ft new
+declare -Ft doc
 
+function new {
+
+  function bin_dir {
+    printf "%3s* bin/$project_name\n"
+  }
+
+  function doc_dir {
+    printf "%3s* doc/AUTHORS\n"
+    printf "%3s* doc/COPYING\n"
+    printf "%3s* doc/CREDITS\n"
+    printf "%3s* doc/Changelog\n"
+    printf "%3s* doc/LICENCE\n"
+    printf "%3s* doc/NEWS\n"
+    printf "%3s* doc/NOTES\n"
+  }
+
+  function etc_dir {
+    printf "%3s* etc/$project_name.rc\n"
+  }
+
+  function lib_dir {
+    printf "%3s* lib/$project_name.sh\n"
+  }
+
+  function test_dir {
+    printf "%3s* test/test_$project_name.sh\n"
+  }
+
+  function vendor_dir {
+    printf "%3s* vendor/\n"
+  }
+
+  function root_files {
+    printf "%3s* README\n"
+    printf "%3s* TODO\n"
+  }
+
+  declare project_name=$1
   
-function project() {
-  function new() {
-    return 0
-  }
+  printf "Creating project $project_name ...\n"
+  bin_dir
+  doc_dir
+  etc_dir
+  lib_dir
+  test_dir
+  vendor_dir
+  root_files
 
-  function doc() {
-    return 0
-  }
-
-  while [[ ${#} -gt 0 ]]
-  do
-    case ${1} in
-      -n|--new  ) printf "New project: ${2}\n" ; shift ;;
-      *         ) return 1;;
-    esac
-  done
   return 0
 }
 
-function script() {
-  function new() {
-    printf "New script: ${1}\n"
-    return 0
-  }
-
-  function config() {
-    return 0
-  }
-  
-  ${@}
-
+function doc() {
+  return 0
 }
 
-
-console color -f green
-
-${@}
+if [[ $# -eq 1 ]]; then
+  new $1
+elif [[ $# -gt 1 ]]; then
+  $@
+fi
 
