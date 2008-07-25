@@ -41,51 +41,38 @@ declare -Ft doc
 
 function new {
 
-  function bin_dir {
-    printf "%3s* bin/$project_name\n"
+  function make_directory {
+    declare directory_path=$1
+    declare file=''
+
+    # [[ !$directory_path ]] && return 1
+
+    mkdir -p $directory_path && printf "%3s* $directory_path\n"
+    shift
+
+    while [[ $# -gt 0 ]]; do
+      file=$1
+      echo "# Project $project_name. Input $file contents in this file." > $directory_path/$file && printf "%3s* $directory_path/$file\n"
+      shift
+    done
   }
 
-  function doc_dir {
-    printf "%3s* doc/AUTHORS\n"
-    printf "%3s* doc/COPYING\n"
-    printf "%3s* doc/CREDITS\n"
-    printf "%3s* doc/Changelog\n"
-    printf "%3s* doc/LICENCE\n"
-    printf "%3s* doc/NEWS\n"
-    printf "%3s* doc/NOTES\n"
-  }
+  declare project_path=$1
+  declare project_name=${project_path##*/}
+  declare project_base=${project_path%%$project_name}
 
-  function etc_dir {
-    printf "%3s* etc/$project_name.rc\n"
-  }
+  declare -a project_directories=('bin' 'doc' 'etc' 'lib' 'test' 'vendor')
+  declare -a       project_files=('README' 'TODO')
+  declare -a   project_documents=('AUTHORS' 'COPYING' 'CREDITS' 'Changelog' 'LICENCE' 'NEWS' 'NOTES')
 
-  function lib_dir {
-    printf "%3s* lib/$project_name.sh\n"
-  }
-
-  function test_dir {
-    printf "%3s* test/test_$project_name.sh\n"
-  }
-
-  function vendor_dir {
-    printf "%3s* vendor/\n"
-  }
-
-  function root_files {
-    printf "%3s* README\n"
-    printf "%3s* TODO\n"
-  }
-
-  declare project_name=$1
-  
-  printf "Creating project $project_name ...\n"
-  bin_dir
-  doc_dir
-  etc_dir
-  lib_dir
-  test_dir
-  vendor_dir
-  root_files
+  printf "Creating project $project_path ...\n"
+  make_directory $project_path        ${project_files[@]}
+  make_directory $project_path/bin    $project_name
+  make_directory $project_path/doc    ${project_documents[@]}
+  make_directory $project_path/etc    $project_name.rc
+  make_directory $project_path/lib    $project_name.sh
+  make_directory $project_path/test   test_$project_name.sh
+  make_directory $project_path/vendor
 
   return 0
 }
