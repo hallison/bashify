@@ -1,11 +1,7 @@
-
-declare -F test_should_build_new_project
-declare -F test_should_validates_directory_tree
-
 declare project_path="test/bashfoo"
 
 function test_should_build_new_project {
-  bin/bashify $project_path
+  bin/bashify project $project_path
   [[ $? ]] && echo "R: Success" || "> Failure"
 }
 
@@ -27,11 +23,14 @@ function test_should_validates_directory_tree {
   [[ ${result[*]} == ${success[*]} ]] && echo "R: Success" || echo "R: Failure"
 }
 
-declare -a test_list=()
+declare -a    function_list=($(declare -F | sed 's/declare -f//'))
+declare -a        test_list=()
+declare    function_defined=''
+declare       test_function=''
 
-for f in $(declare -F); do
-  [[ $f =~ 'test' ]] && t=${f/'declare'} || t=''
-  test_list=(${test_list[@]} ${t/'-f'})
+for function_defined in ${function_list[@]}; do
+  [[ $function_defined =~ "^test_.+$" ]] && test_function=${function_defined}
+  test_list=(${test_list[@]//$test_function} $test_function)
 done
 
 for t in ${test_list[@]}; do

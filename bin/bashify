@@ -37,9 +37,18 @@
 #
 
 declare -Ft new
-declare -Ft doc
 
-function new {
+function project {
+
+  declare project_path=$1
+  declare project_name=${project_path##*/}
+  declare project_base=${project_path%%$project_name}
+
+  declare -a project_directories=('bin' 'doc' 'etc' 'lib' 'test' 'vendor')
+  declare -a       project_files=('README' 'TODO')
+  declare -a   project_documents=('AUTHORS' 'COPYING' 'CREDITS' 'Changelog' 'LICENCE' 'NEWS' 'NOTES')
+
+  declare -F make_directory
 
   function make_directory {
     declare directory_path=$1
@@ -57,19 +66,11 @@ function new {
     done
   }
 
-  declare project_path=$1
-  declare project_name=${project_path##*/}
-  declare project_base=${project_path%%$project_name}
-
-  declare -a project_directories=('bin' 'doc' 'etc' 'lib' 'test' 'vendor')
-  declare -a       project_files=('README' 'TODO')
-  declare -a   project_documents=('AUTHORS' 'COPYING' 'CREDITS' 'Changelog' 'LICENCE' 'NEWS' 'NOTES')
-
   printf "Creating project $project_path ...\n"
   make_directory $project_path        ${project_files[@]}
   make_directory $project_path/bin    $project_name
   make_directory $project_path/doc    ${project_documents[@]}
-  make_directory $project_path/etc    $project_name.rc
+  make_directory $project_path/etc    $project_name.conf
   make_directory $project_path/lib    $project_name.sh
   make_directory $project_path/test   test_$project_name.sh
   make_directory $project_path/vendor
@@ -77,13 +78,5 @@ function new {
   return 0
 }
 
-function doc() {
-  return 0
-}
-
-if [[ $# -eq 1 ]]; then
-  new $1
-elif [[ $# -gt 1 ]]; then
-  $@
-fi
-
+## Run all options
+$@

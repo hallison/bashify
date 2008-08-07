@@ -1,6 +1,5 @@
 ############################################################################
 # Bashify
-# $Id: console 2 2008-06-26 17:22:34Z hallison $
 #
 # Copyright (C) 2007, 2008 by Hallison Vasconcelos Batista
 # --------------------------------------------------------------------------
@@ -200,28 +199,6 @@ function put() {
 function console() {
   declare -r ESCAPE="\033["
 
-  ## Constants for modes of colors.
-  declare -r TEXT_CONSOLE="0m"
-  declare -r TEXT_STRONG="1m"
-  declare -r TEXT_NORMAL="2m"
-  declare -r TEXT_UNDERLINE="4m"
-  declare -r TEXT_BLINK="5m"
-  declare -r TEXT_REVERSE="7m"
-  #declare -r TEXT_NONE3="3m"
-  #declare -r TEXT_NONE6="6m"
-
-  ## Constants for colors.
-  declare -r TEXT_FGCOLOR=3
-  declare -r TEXT_BGCOLOR=4
-  declare -r TEXT_COLOR_BLACK="0m"
-  declare -r TEXT_COLOR_RED="1m"
-  declare -r TEXT_COLOR_GREEN="2m"
-  declare -r TEXT_COLOR_BROWN="3m"
-  declare -r TEXT_COLOR_BLUE="4m"
-  declare -r TEXT_COLOR_PURPLE="5m"
-  declare -r TEXT_COLOR_CYAN="6m"
-  declare -r TEXT_COLOR_GRAY="7m"
-
   ## Constants for cursor.
   declare -r CURSOR_UP="A"
   declare -r CURSOR_DOWN="B"
@@ -243,61 +220,6 @@ function console() {
   ## Constants for clear screen.
   declare -r CLEAR_SCREEN="J"
   declare -r CLEAR_LINE="K"
-
-  ###
-  # Description:
-  #   Adjust mode of color.
-  #
-  # Usage:
-  #   text [MODE]
-  #
-
-  declare -ar TEXT_COMMANDS=(console strong normal underline blink reverse)
-  function text() {
-    case ${1} in
-      -c|--console   ) put "${ESCAPE}${TEXT_CONSOLE}"   ;;
-      -s|--strong    ) put "${ESCAPE}${TEXT_STRONG}"    ;;
-      -n|--normal    ) put "${ESCAPE}${TEXT_NORMAL}"    ;;
-      -u|--underline ) put "${ESCAPE}${TEXT_UNDERLINE}" ;;
-      -b|--blink     ) put "${ESCAPE}${TEXT_BLINK}"     ;;
-      -r|--reverse   ) put "${ESCAPE}${TEXT_REVERSE}"   ;;
-      *              ) return 1 ;; # TODO: Return correct code
-    esac
-    return 0
-  }
-
-  ###
-  # Description:
-  #   Adjust console colors.
-  #
-  # Usage:
-  #   color [OPTION] [COLOR]
-  #
-
-  declare -ar TEXT_COLOR_OPTIONS=(foreground background)
-  declare -ar TEXT_COLOR_VALUES=(black red green brown blue purple cyan gray)
-  function color() {
-    local option_mode
-    while [[ ${#} -gt 0 ]]
-    do
-      [[ ${1} =~ -(f|-foreground)$ ]] && option_mode="${TEXT_FGCOLOR}"
-      [[ ${1} =~ -(b|-background)$ ]] && option_mode="${TEXT_BGCOLOR}"
-      shift
-      case ${1} in
-        0|black        ) put "${ESCAPE}${option_mode}${TEXT_COLOR_BLACK}"  ;;
-        1|red          ) put "${ESCAPE}${option_mode}${TEXT_COLOR_RED}"    ;;
-        2|green        ) put "${ESCAPE}${option_mode}${TEXT_COLOR_GREEN}"  ;;
-        3|brown|yellow ) put "${ESCAPE}${option_mode}${TEXT_COLOR_BROWN}"  ;;
-        4|blue         ) put "${ESCAPE}${option_mode}${TEXT_COLOR_BLUE}"   ;;
-        5|purple       ) put "${ESCAPE}${option_mode}${TEXT_COLOR_PURPLE}" ;;
-        6|cyan         ) put "${ESCAPE}${option_mode}${TEXT_COLOR_CYAN}"   ;;
-        7|gray         ) put "${ESCAPE}${option_mode}${TEXT_COLOR_GRAY}"   ;;
-        *                     ) return 1 ;; # TODO: Return correct code
-      esac
-      shift
-    done
-    return 0
-  }
 
   ###
   # Description:
@@ -341,8 +263,8 @@ function console() {
     local option_clear
     while [[ ${#} -gt 0 ]]
     do
-      [[ ${1} =~ -(s|-screen)$ ]] && option_clear="${CLEAR_SCREEN}"
-      [[ ${1} =~ -(l|-line)$   ]] && option_clear="${CLEAR_LINE}"
+      [[ ${1} =~ "-(s|-screen)$" ]] && option_clear="${CLEAR_SCREEN}"
+      [[ ${1} =~ "-(l|-line)$"   ]] && option_clear="${CLEAR_LINE}"
       shift
       case ${1} in
         to-end   ) put "${ESCAPE}0${option_clear}" ;;
