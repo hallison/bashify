@@ -14,6 +14,7 @@
 #
 
 function mode {
+  [[ $# -eq 0 ]] && { printf "$BASH_SOURCE: line $LINENO: option required"; return 64; }
   case $1 in
     -c|console   ) printf "${ESCAPE}0m" ; return $? ;;
     -s|strong    ) printf "${ESCAPE}1m" ; return $? ;;
@@ -22,8 +23,8 @@ function mode {
     -b|blink     ) printf "${ESCAPE}5m" ; return $? ;;
     -r|reverse   ) printf "${ESCAPE}7m" ; return $? ;;
     *            ) { 
-      printf "$BASH_SOURCE: line $LINENO: option required"
-      return 1
+      printf "$BASH_SOURCE: line $LINENO: invalid: $1"
+      return 65
     } ;; # TODO: Return correct code
   esac
 }

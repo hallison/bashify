@@ -17,10 +17,15 @@
 function color {
   declare option_mode=''
 
+  [[ $# -eq 0 ]] && { printf "$BASH_SOURCE: line $LINENO: option required"; return 64; }
+
   case $1 in
     -f|foreground ) option_mode="3" ;;
     -b|background ) option_mode="4" ;;
-    *             ) echo "$BASH_SOURCE: line $LINENO: invalid mode"; return 64 ;;
+    *             ) {
+      printf "$BASH_SOURCE: line $LINENO: invalid: $1"
+      return 64
+    } ;;
   esac
 
   shift
@@ -35,8 +40,8 @@ function color {
     6|cyan         ) printf "${ESCAPE}${option_mode}6m" ; return $? ;;
     7|gray|white   ) printf "${ESCAPE}${option_mode}7m" ; return $? ;;
     *              ) {
-      printf "$BASH_SOURCE: line $LINENO: option required";
-      return 64
+      printf "$BASH_SOURCE: line $LINENO: invalid: $1"
+      return 65
     } ;; # TODO: Return correct code
   esac
 }
